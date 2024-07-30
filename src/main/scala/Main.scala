@@ -16,7 +16,7 @@ object Main extends WindowAvg with LoopAvg {
 
     val spark = SparkSession.builder
       .appName("Spark Window")
-      .config("spark.sql.session.timeZone", "America/New_York")
+      // .config("spark.sql.session.timeZone", "America/New_York")
       // .config("spark.master", "local[*]") // local dev
       // .config("spark.log.leve", "ERROR") // local dev
       // .config(
@@ -33,6 +33,8 @@ object Main extends WindowAvg with LoopAvg {
 
     val jobType = args(0).toLowerCase
     val destTable = args(1).toLowerCase
+    val pgPW = args(2)
+    val pgURL = args(3)
 
     // val jobType = "window"
     // val destTable = "cf-data-analytics.spark_window.wiki_views_optimized"
@@ -43,6 +45,8 @@ object Main extends WindowAvg with LoopAvg {
     import spark.implicits._
 
     // val pages = Seq("Google", "Amazon", "Microsoft")
+
+    //////////////////////////////////////////////////////////////////////////
 
     val df =
       spark.read
@@ -61,8 +65,6 @@ object Main extends WindowAvg with LoopAvg {
         throw new IllegalArgumentException(s"Invalid job type: $jobType")
     }
 
-    // resultDF.show()
-
     resultDF.write
       .format("bigquery")
       .option("writeMethod", "direct")
@@ -70,6 +72,23 @@ object Main extends WindowAvg with LoopAvg {
       .save(
         destTable
       )
+
+    //////////////////////////////////////////////////////////////////////////
+
+    val pgUser = "postgres"
+    val pgTable =
+      "wikipedia_pageviews" // The table where you want to store data
+
+    resultDF.write
+      .format("jdbc")
+      .option("url", pgURL)
+      .option("dbtable", pgTable)
+      .option("user", pgUser)
+      .option("password", pgPW)
+      .mode("overwrite") // or "append" depending on your needs
+      .save()
+
+    //////////////////////////////////////////////////////////////////////////
 
     // resultDF.write
     //   .format("parquet")
