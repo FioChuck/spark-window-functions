@@ -31,11 +31,11 @@ object Main extends WindowAvg with LoopAvg {
       // )
       .getOrCreate()
 
-    // val jobType = args(0).toLowerCase
-    // val destTable = args(1).toLowerCase
+    val jobType = args(0).toLowerCase
+    val destTable = args(1).toLowerCase
 
-    val jobType = "window"
-    val destTable = "cf-data-analytics.spark_window.wiki_views_optimized"
+    // val jobType = "window"
+    // val destTable = "cf-data-analytics.spark_window.wiki_views_optimized"
 
     // val jobType = "loop"
     // val destTable = "cf-data-analytics.spark_window.wiki_views_loop"
@@ -63,21 +63,21 @@ object Main extends WindowAvg with LoopAvg {
 
     resultDF.show()
 
-    // resultDF.write
-    //   .format("bigquery")
-    //   .option("writeMethod", "direct")
-    //   .mode("overwrite")
-    //   .save(
-    //     destTable
-    //   )
-
     resultDF.write
-      .format("parquet")
+      .format("bigquery")
+      .option("writeMethod", "direct")
       .mode("overwrite")
-      .save("gs://analytics-data-lake/wiki-data")
+      .save(
+        destTable
+      )
 
-    df.count()
-    print("done")
+    // resultDF.write
+    //   .format("parquet")
+    //   .mode("overwrite")
+    //   .save("gs://analytics-data-lake/wiki-data")
+
+    // df.count()
+    // print("done")
 
   }
 }
