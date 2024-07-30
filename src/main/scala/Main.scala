@@ -61,7 +61,7 @@ object Main extends WindowAvg with LoopAvg {
         throw new IllegalArgumentException(s"Invalid job type: $jobType")
     }
 
-    resultDF.show()
+    // resultDF.show()
 
     resultDF.write
       .format("bigquery")
