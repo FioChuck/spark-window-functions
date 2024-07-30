@@ -29,6 +29,6 @@ jobs:
         uses: "google-github-actions/upload-cloud-storage@v1"
         with:
           path: "target/scala-2.12"
-          destination: "cf-spark-jobs/spark-lineage"
+          destination: "cf-spark-jobs/spark-window"
           glob: "*.jar"
           gzip: false
