@@ -94,10 +94,10 @@ object Main extends WindowAvg with LoopAvg {
 
     // val dfOut = resultDF.filter($"views" > 100)
 
-    dfOut.write
+    df.write
       .format("jdbc")
       .option("url", pgURL)
-      .option("dbtable", "wikipedia_rolling_avg_views")
+      .option("dbtable", "wikipedia_pageviews_limit")
       .option("user", "postgres")
       .option("password", pgPW)
       .option("driver", "org.postgresql.Driver")
@@ -106,10 +106,10 @@ object Main extends WindowAvg with LoopAvg {
 
     //////////////////////////////////////////////////////////////////////////
 
-    df.write
-      .format("parquet")
-      .mode("overwrite")
-      .save("gs://analytics-data-lake/wiki-data")
+    // df.write
+    //   .format("parquet")
+    //   .mode("overwrite")
+    //   .save("gs://analytics-data-lake/wiki-data")
 
     // df.count()
     // print("done")
