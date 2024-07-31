@@ -80,7 +80,7 @@ object Main extends WindowAvg with LoopAvg {
     var df = spark.read
       .format("jdbc")
       .option("url", pgURL)
-      .option("dbtable", "wikipedia_pageviews_limit")
+      .option("dbtable", "wikipedia_pageviews")
       .option("user", "postgres")
       .option("password", pgPW)
       .option("driver", "org.postgresql.Driver")
