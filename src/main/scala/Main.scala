@@ -92,7 +92,7 @@ object Main extends WindowAvg with LoopAvg {
 
     val resultDF = wAvg(df, spark)
 
-    val dfOut = resultDF.filter($"views" > 100)
+    val dfOut = resultDF.filter($"views" > 10)
 
     df.write
       .format("jdbc")
