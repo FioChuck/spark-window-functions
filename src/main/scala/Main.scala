@@ -85,6 +85,7 @@ object Main extends WindowAvg with LoopAvg {
       .option("password", pgPW)
       .option("driver", "org.postgresql.Driver")
       .load()
+      .repartition(100)
 
     //////////////////////////////////////////////////////////////////////////
 
