@@ -82,7 +82,7 @@ object Main extends WindowAvg with LoopAvg {
       .option("user", pgUser)
       .option("password", pgPW)
       .option("driver", "org.postgresql.Driver")
-      // .mode("overwrite")
+      .mode("overwrite")
       .save()
 
     //////////////////////////////////////////////////////////////////////////
