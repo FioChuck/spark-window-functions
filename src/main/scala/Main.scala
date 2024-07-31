@@ -45,13 +45,13 @@ object Main extends WindowAvg with LoopAvg {
 
     //////////////////////////////////////////////////////////////////////////
 
-    val df =
-      spark.read
-        .bigquery("bigquery-public-data.wikipedia.pageviews_2024")
-        .filter(to_date($"datehour").between("2024-01-01", "2024-02-1"))
-        // .filter($"title".isin(pages: _*))
-        .filter($"wiki" === "en")
-        .select($"datehour", $"title", $"views")
+    // val df =
+    //   spark.read
+    //     .bigquery("bigquery-public-data.wikipedia.pageviews_2024")
+    //     .filter(to_date($"datehour").between("2024-01-01", "2024-02-1"))
+    //     // .filter($"title".isin(pages: _*))
+    //     .filter($"wiki" === "en")
+    //     .select($"datehour", $"title", $"views")
 
     // val resultDF: DataFrame = jobType match {
     //   case "window" =>
@@ -72,14 +72,31 @@ object Main extends WindowAvg with LoopAvg {
 
     //////////////////////////////////////////////////////////////////////////
 
-    val pgUser = "postgres"
-    val pgTable = "wikipedia_pageviews"
+    // val pgUser = "postgres"
+    // val pgTable = "wikipedia_pageviews"
 
-    df.write
+    var df = spark.read
       .format("jdbc")
       .option("url", pgURL)
-      .option("dbtable", pgTable)
-      .option("user", pgUser)
+      .option("dbtable", "wikipedia_pageviews")
+      .option("user", "postgres")
+      .option("password", pgPW)
+      .option("driver", "org.postgresql.Driver")
+      .load()
+
+    //////////////////////////////////////////////////////////////////////////
+
+    df = df.checkpoint()
+
+    val resultDF = wAvg(df, spark)
+
+    val dfOut = resultDF.filter($"views" > 100)
+
+    dfOut.write
+      .format("jdbc")
+      .option("url", pgURL)
+      .option("dbtable", "wikipedia_rolling_avg_views")
+      .option("user", "postgres")
       .option("password", pgPW)
       .option("driver", "org.postgresql.Driver")
       .mode("overwrite")
