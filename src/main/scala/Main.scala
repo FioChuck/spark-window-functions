@@ -31,6 +31,8 @@ object Main extends WindowAvg with LoopAvg {
       // )
       .getOrCreate()
 
+    spark.sparkContext.setCheckpointDir("gs://cf-spark-temp/checkpoint")
+
     val jobType = args(0).toLowerCase
     val destTable = args(1).toLowerCase
     val pgPW = args(2)
