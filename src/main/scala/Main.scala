@@ -88,28 +88,28 @@ object Main extends WindowAvg with LoopAvg {
 
     //////////////////////////////////////////////////////////////////////////
 
-    df = df.checkpoint()
+    // df = df.checkpoint()
 
-    val resultDF = wAvg(df, spark)
+    // val resultDF = wAvg(df, spark)
 
-    val dfOut = resultDF.filter($"views" > 100)
+    // val dfOut = resultDF.filter($"views" > 100)
 
-    dfOut.write
-      .format("jdbc")
-      .option("url", pgURL)
-      .option("dbtable", "wikipedia_rolling_avg_views")
-      .option("user", "postgres")
-      .option("password", pgPW)
-      .option("driver", "org.postgresql.Driver")
-      .mode("overwrite")
-      .save()
+    // dfOut.write
+    //   .format("jdbc")
+    //   .option("url", pgURL)
+    //   .option("dbtable", "wikipedia_rolling_avg_views")
+    //   .option("user", "postgres")
+    //   .option("password", pgPW)
+    //   .option("driver", "org.postgresql.Driver")
+    //   .mode("overwrite")
+    //   .save()
 
     //////////////////////////////////////////////////////////////////////////
 
-    // resultDF.write
-    //   .format("parquet")
-    //   .mode("overwrite")
-    //   .save("gs://analytics-data-lake/wiki-data")
+    df.write
+      .format("parquet")
+      .mode("overwrite")
+      .save("gs://analytics-data-lake/wiki-data")
 
     // df.count()
     // print("done")
