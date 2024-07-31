@@ -53,14 +53,14 @@ object Main extends WindowAvg with LoopAvg {
         .filter($"wiki" === "en")
         .select($"datehour", $"title", $"views")
 
-    val resultDF: DataFrame = jobType match {
-      case "window" =>
-        wAvg(df, spark)
-      case "loop" =>
-        lAvg(df, spark)
-      case _ =>
-        throw new IllegalArgumentException(s"Invalid job type: $jobType")
-    }
+    // val resultDF: DataFrame = jobType match {
+    //   case "window" =>
+    //     wAvg(df, spark)
+    //   case "loop" =>
+    //     lAvg(df, spark)
+    //   case _ =>
+    //     throw new IllegalArgumentException(s"Invalid job type: $jobType")
+    // }
 
     // resultDF.write
     //   .format("bigquery")
@@ -81,7 +81,8 @@ object Main extends WindowAvg with LoopAvg {
       .option("dbtable", pgTable)
       .option("user", pgUser)
       .option("password", pgPW)
-      .mode("overwrite") // or "append" depending on your needs
+      .option("driver", "org.postgresql.Driver")
+      // .mode("overwrite")
       .save()
 
     //////////////////////////////////////////////////////////////////////////
