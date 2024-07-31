@@ -80,7 +80,7 @@ object Main extends WindowAvg with LoopAvg {
     var df = spark.read
       .format("jdbc")
       .option("url", pgURL)
-      .option("dbtable", "wikipedia_pageviews")
+      .option("dbtable", "wikipedia_pageviews_limit")
       .option("user", "postgres")
       .option("password", pgPW)
       .option("driver", "org.postgresql.Driver")
@@ -94,7 +94,7 @@ object Main extends WindowAvg with LoopAvg {
 
     val dfOut = resultDF.filter($"views" > 10)
 
-    df.write
+    dfOut.write
       .format("jdbc")
       .option("url", pgURL)
       .option("dbtable", "wikipedia_rolling_avg_views")
