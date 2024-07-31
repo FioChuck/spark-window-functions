@@ -84,6 +84,10 @@ object Main extends WindowAvg with LoopAvg {
       .option("user", "postgres")
       .option("password", pgPW)
       .option("driver", "org.postgresql.Driver")
+      .option("partitionColumn", "datehour")
+      .option("lowerBound", "2024-01-01T00:00:00Z")
+      .option("upperBound", "2024-02-01T23:00:00Z")
+      .option("numPartitions", "3")
       .load()
       .repartition(100)
 
