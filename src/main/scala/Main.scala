@@ -43,17 +43,17 @@ object Main extends WindowAvg with LoopAvg {
 
     import spark.implicits._
 
-    // val pages = Seq("Google", "Amazon", "Microsoft")
+    val pages = Seq("Google", "Amazon", "Microsoft")
 
     //////////////////////////////////////////////////////////////////////////
 
-    // val df =
-    //   spark.read
-    //     .bigquery("bigquery-public-data.wikipedia.pageviews_2024")
-    //     .filter(to_date($"datehour").between("2024-01-01", "2024-02-1"))
-    //     // .filter($"title".isin(pages: _*))
-    //     .filter($"wiki" === "en")
-    //     .select($"datehour", $"title", $"views")
+    val df =
+      spark.read
+        .bigquery("bigquery-public-data.wikipedia.pageviews_2024")
+        .filter(to_date($"datehour").between("2024-01-01", "2024-02-1"))
+        .filter($"title".isin(pages: _*))
+        .filter($"wiki" === "en")
+        .select($"datehour", $"title", $"views")
 
     // val resultDF: DataFrame = jobType match {
     //   case "window" =>
@@ -77,14 +77,14 @@ object Main extends WindowAvg with LoopAvg {
     // val pgUser = "postgres"
     // val pgTable = "wikipedia_pageviews"
 
-    var df = spark.read
-      .format("jdbc")
-      .option("url", pgURL)
-      .option("dbtable", "wikipedia_pageviews")
-      .option("user", "postgres")
-      .option("password", pgPW)
-      .option("driver", "org.postgresql.Driver")
-      .load()
+    // var df = spark.read
+    //   .format("jdbc")
+    //   .option("url", pgURL)
+    //   .option("dbtable", "wikipedia_pageviews")
+    //   .option("user", "postgres")
+    //   .option("password", pgPW)
+    //   .option("driver", "org.postgresql.Driver")
+    //   .load()
 
     //////////////////////////////////////////////////////////////////////////
 
@@ -94,15 +94,15 @@ object Main extends WindowAvg with LoopAvg {
 
     // val dfOut = resultDF.filter($"views" > 100)
 
-    // dfOut.write
-    //   .format("jdbc")
-    //   .option("url", pgURL)
-    //   .option("dbtable", "wikipedia_rolling_avg_views")
-    //   .option("user", "postgres")
-    //   .option("password", pgPW)
-    //   .option("driver", "org.postgresql.Driver")
-    //   .mode("overwrite")
-    //   .save()
+    dfOut.write
+      .format("jdbc")
+      .option("url", pgURL)
+      .option("dbtable", "wikipedia_rolling_avg_views")
+      .option("user", "postgres")
+      .option("password", pgPW)
+      .option("driver", "org.postgresql.Driver")
+      .mode("overwrite")
+      .save()
 
     //////////////////////////////////////////////////////////////////////////
 
