@@ -41,7 +41,7 @@ object Main extends WindowAvg with LoopAvg {
 
     import spark.implicits._
 
-    val pages = Seq("Google", "Amazon", "Microsoft")
+    // val pages = Seq("Google", "Amazon", "Microsoft")
 
     //////////////////////////////////////////////////////////////////////////
 
@@ -49,7 +49,7 @@ object Main extends WindowAvg with LoopAvg {
       spark.read
         .bigquery("bigquery-public-data.wikipedia.pageviews_2024")
         .filter(to_date($"datehour").between("2024-01-01", "2024-02-1"))
-        .filter($"title".isin(pages: _*))
+        // .filter($"title".isin(pages: _*))
         .filter($"wiki" === "en")
         .select($"datehour", $"title", $"views")
 
