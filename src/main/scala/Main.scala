@@ -36,15 +36,12 @@ object Main extends WindowAvg with LoopAvg {
     val pgPW = args(2)
     val pgURL = args(3)
 
-    // val jobType = "window"
-    // val destTable = "cf-data-analytics.spark_window.wiki_views_optimized"
-
     // val jobType = "loop"
     // val destTable = "cf-data-analytics.spark_window.wiki_views_loop"
 
     import spark.implicits._
 
-    // val pages = Seq("Google", "Amazon", "Microsoft")
+    val pages = Seq("Google", "Amazon", "Microsoft")
 
     //////////////////////////////////////////////////////////////////////////
 
@@ -52,7 +49,7 @@ object Main extends WindowAvg with LoopAvg {
       spark.read
         .bigquery("bigquery-public-data.wikipedia.pageviews_2024")
         .filter(to_date($"datehour").between("2024-01-01", "2024-02-1"))
-        // .filter($"title".isin(pages: _*))
+        .filter($"title".isin(pages: _*))
         .filter($"wiki" === "en")
         .select($"datehour", $"title", $"views")
 
@@ -65,21 +62,20 @@ object Main extends WindowAvg with LoopAvg {
         throw new IllegalArgumentException(s"Invalid job type: $jobType")
     }
 
-    resultDF.write
-      .format("bigquery")
-      .option("writeMethod", "direct")
-      .mode("overwrite")
-      .save(
-        destTable
-      )
+    // resultDF.write
+    //   .format("bigquery")
+    //   .option("writeMethod", "direct")
+    //   .mode("overwrite")
+    //   .save(
+    //     destTable
+    //   )
 
     //////////////////////////////////////////////////////////////////////////
 
     val pgUser = "postgres"
-    val pgTable =
-      "wikipedia_pageviews" // The table where you want to store data
+    val pgTable = "wikipedia_pageviews"
 
-    resultDF.write
+    df.write
       .format("jdbc")
       .option("url", pgURL)
       .option("dbtable", pgTable)
