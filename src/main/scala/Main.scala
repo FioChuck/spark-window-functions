@@ -34,10 +34,9 @@ object Main extends WindowAvg with LoopAvg {
     spark.sparkContext.setCheckpointDir("gs://cf-spark-temp/checkpoint")
 
     // val jobType = args(0).toLowerCase
-    val sourceTable = args(0).toLowerCase
-    val pgPW = args(1)
-    val pgURL = args(2)
-
+    val pgPW = args(0)
+    val pgURL = args(1)
+    val sourceTable = args(2).toLowerCase
     // val jobType = "loop"
     // val destTable = "cf-data-analytics.spark_window.wiki_views_loop"
 
