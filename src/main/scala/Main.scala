@@ -33,10 +33,10 @@ object Main extends WindowAvg with LoopAvg {
 
     spark.sparkContext.setCheckpointDir("gs://cf-spark-temp/checkpoint")
 
-    val jobType = args(0).toLowerCase
-    val destTable = args(1).toLowerCase
-    val pgPW = args(2)
-    val pgURL = args(3)
+    // val jobType = args(0).toLowerCase
+    val sourceTable = args(0).toLowerCase
+    val pgPW = args(1)
+    val pgURL = args(2)
 
     // val jobType = "loop"
     // val destTable = "cf-data-analytics.spark_window.wiki_views_loop"
@@ -80,7 +80,7 @@ object Main extends WindowAvg with LoopAvg {
     var df = spark.read
       .format("jdbc")
       .option("url", pgURL)
-      .option("dbtable", "wikipedia_pageviews")
+      .option("dbtable", sourceTable)
       .option("user", "postgres")
       .option("password", pgPW)
       .option("driver", "org.postgresql.Driver")
@@ -98,6 +98,8 @@ object Main extends WindowAvg with LoopAvg {
     val resultDF = wAvg(df, spark)
 
     val dfOut = resultDF.filter($"views" > 10)
+
+    df = df.checkpoint()
 
     dfOut.write
       .format("jdbc")
