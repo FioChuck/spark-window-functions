@@ -88,13 +88,12 @@ object Main extends WindowAvg with LoopAvg {
       .option("upperBound", "2024-02-01T23:00:00Z")
       .option("numPartitions", "200")
       .load()
-    // .repartition(100)
 
     //////////////////////////////////////////////////////////////////////////
 
     df = df.checkpoint()
 
-    val resultDF = wAvg(df, spark)
+    val resultDF = wAvg(df, spark).repartition(300)
 
     var dfOut = resultDF.filter($"views" > 10)
 
