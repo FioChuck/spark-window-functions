@@ -87,9 +87,9 @@ object Main extends WindowAvg with LoopAvg {
       .option("partitionColumn", "datehour")
       .option("lowerBound", "2024-01-01T00:00:00Z")
       .option("upperBound", "2024-02-01T23:00:00Z")
-      .option("numPartitions", "3")
+      .option("numPartitions", "200")
       .load()
-      .repartition(100)
+    // .repartition(100)
 
     //////////////////////////////////////////////////////////////////////////
 
